@@ -139,7 +139,7 @@ export default function AlbumPage({ params }: { params: { albumId: string } }) {
           </Card>
         </section>
       )}
-    </div>
+      </div>
   );
 }
 

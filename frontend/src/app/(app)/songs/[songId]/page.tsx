@@ -11,8 +11,8 @@ import { ChevronLeft, Play, Pause, SkipBack, SkipForward, Heart, PlusCircle, Lis
 import { useState, useEffect } from 'react';
 import { useAudio } from '@/contexts/audio-context';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { toast } from 'sonner';
 import { Slider } from '@/components/ui/slider';
+import { toast } from 'sonner';
 
 function getHighResImage(imgArr: any[] | undefined) {
   if (!Array.isArray(imgArr) || !imgArr[0]?.url) return 'https://placehold.co/400x400?text=No+Image';
@@ -145,7 +145,7 @@ export default function SongDetailPage({ params }: { params: { songId: string } 
       const playlistId = searchParams.get('playlistId') || song.playlistId || '';
       // Only set queue if queue is not already the full album/playlist
       const isSingleSongQueue = queue.length === 1 && queue[0].id === song.id;
-      const isSongInQueue = queue.find((s) => s.id === song.id);
+      const isSongInQueue = queue.find((s: any) => s.id === song.id);
       if ((albumId || playlistId) && (queue.length === 0 || isSingleSongQueue || !isSongInQueue)) {
         let songsArr: any[] = [];
         if (albumId) {

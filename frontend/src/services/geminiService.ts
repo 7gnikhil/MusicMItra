@@ -1,30 +1,35 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { LyricsResponse } from "../types";
 
-// Helper to convert File to Base64
-const fileToGenerativePart = async (file: File): Promise<{ inlineData: { data: string; mimeType: string } }> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const base64String = reader.result as string;
-      // Remove the data URL prefix (e.g., "data:audio/mp3;base64,")
-      const base64Data = base64String.split(',')[1];
-      resolve({
-        inlineData: {
-          data: base64Data,
-          mimeType: file.type,
-        },
-      });
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
+const toBase64 = (bytes: Uint8Array): string => {
+  if (typeof Buffer !== "undefined") {
+    return Buffer.from(bytes).toString("base64");
+  }
+
+  let binary = "";
+  bytes.forEach((byte) => {
+    binary += String.fromCharCode(byte);
   });
+
+  return btoa(binary);
+};
+
+// Helper to convert file/blob content to the base64 payload Google GenAI expects.
+const fileToGenerativePart = async (file: Blob): Promise<{ inlineData: { data: string; mimeType: string } }> => {
+  const bytes = new Uint8Array(await file.arrayBuffer());
+
+  return {
+    inlineData: {
+      data: toBase64(bytes),
+      mimeType: file.type || "audio/mpeg",
+    },
+  };
 };
 
 export const generateLyrics = async (audioFile: File): Promise<LyricsResponse> => {
-  const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || "AIzaSyA4GxQm6KBMcMn9ejI-hdsly8OHk63XT-s"
+  const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
   if (!apiKey) {
-    throw new Error("API Key is missing. Please check your .env file.");
+    throw new Error("API Key is missing. Please add NEXT_PUBLIC_GEMINI_API_KEY to your frontend .env file.");
   }
 
   const ai = new GoogleGenAI({ apiKey });

@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: 'MusicMitra',
   description: 'Karaoke, Chatbot and Music App',
   manifest: '/manifest.json',
+};
+
+export const viewport = {
   themeColor: '#1d3ab9ff',
 };
 

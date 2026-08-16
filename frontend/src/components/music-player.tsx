@@ -328,7 +328,7 @@ export function MusicPlayer() {
       )}
       {/* Debug: show audio URL and quality */}
       <div className="text-xs text-muted-foreground mt-1 px-2 truncate" style={{maxWidth: '100vw'}}>
-        <span>Now playing: <b>{audioQuality}</b> | <span title={audioUrl}>{audioUrl?.slice(0, 60)}{audioUrl && audioUrl.length > 60 ? '...' : ''}</span></span>
+        <span>Now playing: <b>{audioQuality}</b> | <span title={audioUrl ?? undefined}>{audioUrl?.slice(0, 60)}{audioUrl && audioUrl.length > 60 ? '...' : ''}</span></span>
         {audioUrl && (
           <button
             className="ml-2 underline text-primary hover:text-primary/80"
